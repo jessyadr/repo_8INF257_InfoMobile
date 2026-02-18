@@ -1,6 +1,8 @@
 package com.example.studywisely.presentation.list
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,54 +30,51 @@ fun RoutinesListScreen(
         containerColor = BackgroundMain
     ) { padding ->
 
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            Text(
-                text = "StudyWisely",
-                color = PurpleMain
-            )
+            // 🔹 HEADER (inchangé)
+            item {
+                Text("StudyWisely", color = PurpleMain)
+                Text("Votre assistant de réussite", color = PurpleMain)
 
-            Text(
-                text = "Votre assistant de réussite",
-                color = PurpleMain
-            )
+                Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Text("Mes routines", color = PurpleText)
 
-            Text(
-                text = "Mes routines",
-                color = PurpleText
-            )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            routines.forEach { routine ->
+            // 🔹 LISTE DES ROUTINES
+            items(routines, key = { it.id }) { routine ->
                 RoutineCard(
                     routine = routine,
-                    modifier = Modifier.padding(vertical = 6.dp)
+                    onDelete = { id ->
+                        viewModel.deleteRoutine(id)
+                    }
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            // 🔹 BOUTON EN BAS (inchangé)
+            item {
+                Spacer(modifier = Modifier.height(14.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate(Screen.AddEditRoutineScreen.route)
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = PurpleMain),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(
-                    text = "Ajouter une nouvelle routine",
-                    color = White
-                )
+                Button(
+                    onClick = {
+                        navController.navigate(Screen.AddEditRoutineScreen.route)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = PurpleMain),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Text("Ajouter une nouvelle routine", color = White)
+                }
             }
         }
     }

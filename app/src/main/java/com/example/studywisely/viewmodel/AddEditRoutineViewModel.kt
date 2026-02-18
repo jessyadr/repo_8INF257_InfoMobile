@@ -14,22 +14,27 @@ class AddEditRoutineViewModel : ViewModel() {
 
     fun onEvent(event: AddEditRoutineEvent) {
         when (event) {
+
             is AddEditRoutineEvent.EnteredTitle -> {
                 _routine.value = _routine.value.copy(title = event.value)
             }
+
             is AddEditRoutineEvent.EnteredDescription -> {
                 _routine.value = _routine.value.copy(description = event.value)
             }
-            is AddEditRoutineEvent.EnteredTimeLabel -> {
-                _routine.value = _routine.value.copy(timeLabel = event.value)
+
+            is AddEditRoutineEvent.PickedRoutineDateTime -> {
+                _routine.value =
+                    _routine.value.copy(routineDateTimeMillis = event.millis)
             }
-            is AddEditRoutineEvent.PickedPriority -> {
-                _routine.value = _routine.value.copy(priority = event.value)
+
+            is AddEditRoutineEvent.PickedExamDateTime -> {
+                _routine.value =
+                    _routine.value.copy(examDateTimeMillis = event.millis)
             }
+
             AddEditRoutineEvent.SaveRoutine -> {
-                // si timeLabel vide, on peut le laisser vide (PP1 simple)
                 RoutineUtils.upsertRoutine(_routine.value)
-                // reset formulaire
                 _routine.value = RoutineVM(priority = PriorityType.Moyenne)
             }
         }
