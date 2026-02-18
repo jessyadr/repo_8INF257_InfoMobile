@@ -15,6 +15,7 @@ import com.example.studywisely.presentation.components.RoutineCard
 import com.example.studywisely.ui.theme.*
 import com.example.studywisely.viewmodel.ListRoutinesViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutinesListScreen(
     navController: NavController,
@@ -27,7 +28,43 @@ fun RoutinesListScreen(
     }
 
     Scaffold(
-        containerColor = BackgroundMain
+        containerColor = BackgroundMain,
+        topBar = {
+            TopAppBar(
+                modifier= Modifier
+                    .height(160.dp),
+                title = {
+                    Column {
+                        Text("StudyWisely", color = PurpleMain)
+                        Text("Votre assistant de réussite", color = PurpleMain)
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Row(
+                            modifier= Modifier
+                                .padding(5.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ){
+                            Text("Mes routines", color = PurpleText)
+                            Button(
+                                onClick = {
+                                    navController.navigate(Screen.AddEditRoutineScreen.route)
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = PurpleMain),
+                                modifier = Modifier
+                                    .height(50.dp)
+                            ) {
+                                Text("Ajouter une nouvelle routine", color = White)
+                            }
+                        }
+
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                }
+            )
+        }
     ) { padding ->
 
         LazyColumn(
@@ -38,18 +75,6 @@ fun RoutinesListScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            // 🔹 HEADER (inchangé)
-            item {
-                Text("StudyWisely", color = PurpleMain)
-                Text("Votre assistant de réussite", color = PurpleMain)
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Text("Mes routines", color = PurpleText)
-
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
             // 🔹 LISTE DES ROUTINES
             items(routines, key = { it.id }) { routine ->
                 RoutineCard(
@@ -58,23 +83,6 @@ fun RoutinesListScreen(
                         viewModel.deleteRoutine(id)
                     }
                 )
-            }
-
-            // 🔹 BOUTON EN BAS (inchangé)
-            item {
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Button(
-                    onClick = {
-                        navController.navigate(Screen.AddEditRoutineScreen.route)
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = PurpleMain),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                ) {
-                    Text("Ajouter une nouvelle routine", color = White)
-                }
             }
         }
     }
