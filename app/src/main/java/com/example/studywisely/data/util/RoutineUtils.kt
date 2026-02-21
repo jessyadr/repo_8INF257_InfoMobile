@@ -2,9 +2,33 @@ package com.example.studywisely.data.util
 
 import com.example.studywisely.data.model.PriorityType
 import com.example.studywisely.data.model.RoutineVM
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 object RoutineUtils {
+
+    /**
+     * Helpers pour créer des dates propres (heures rondes).
+     * - routine (révision) : heures rondes (ex: 6, 8, 14, 19)
+     * - examen : seulement 8, 13, 16, 19 (selon ta règle)
+     */
+    private fun at(daysFromNow: Int, hour24: Int, minute: Int = 0): Long {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, daysFromNow)
+        cal.set(Calendar.HOUR_OF_DAY, hour24)
+        cal.set(Calendar.MINUTE, minute)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        return cal.timeInMillis
+    }
+
+    private fun examAt(daysFromNow: Int, hour24: Int): Long {
+        val allowed = setOf(8, 13, 16, 19)
+        require(hour24 in allowed) {
+            "Heure d'examen invalide ($hour24). Autorisées: 8, 13, 16, 19."
+        }
+        return at(daysFromNow, hour24, 0)
+    }
 
     // “Solution temporaire” : liste locale (en attendant DB)
     private val routinesList: MutableList<RoutineVM> = mutableListOf(
@@ -12,73 +36,72 @@ object RoutineUtils {
             id = 1,
             title = "Réviser Mécanique",
             description = "Chapitre 3 + exercices",
-            routineDateTimeMillis = nowPlusHours(2),
-            examDateTimeMillis = nowPlusHours(20)
+            routineDateTimeMillis = at(0, 14),     // aujourd'hui 14h00
+            examDateTimeMillis = examAt(1, 8)      // demain 08h00  -> priorité élevée (souvent)
         ),
         RoutineVM(
             id = 2,
-            title = "Relire notes Électronique 2",
-            description = "Résumé + fiches",
-            routineDateTimeMillis = nowPlusHours(26),
-            examDateTimeMillis = nowPlusDays(5)
+            title = "Réviser Statistiques",
+            description = "Probabilités + exercices",
+            routineDateTimeMillis = at(0, 19),     // aujourd'hui 19h00
+            examDateTimeMillis = examAt(2, 13)     // dans 2 jours 13h00 -> priorité moyenne/élevée selon l'heure actuelle
         ),
         RoutineVM(
             id = 3,
-            title = "Faire lab1 Réseaux",
-            description = "Configurer + rapport",
-            routineDateTimeMillis = nowPlusDays(3),
-            examDateTimeMillis = nowPlusDays(10)
+            title = "Réviser Calcul",
+            description = "Intégrales",
+            routineDateTimeMillis = at(1, 14),     // demain 14h00
+            examDateTimeMillis = examAt(4, 16)     // dans 4 jours 16h00 -> plutôt moyenne/faible
         ),
         RoutineVM(
             id = 4,
-            title = "Réviser Chimie",
-            description = "Équilibres + quiz",
-            routineDateTimeMillis = nowPlusHours(1),
-            examDateTimeMillis = nowPlusDays(8)
+            title = "Projet synthèse - planning",
+            description = "Découper tâches",
+            routineDateTimeMillis = at(2, 8),      // dans 2 jours 08h00
+            examDateTimeMillis = examAt(7, 13)     // dans 7 jours 13h00 -> faible
         ),
         RoutineVM(
             id = 5,
-            title = "Réviser Calcul",
-            description = "Intégrales",
-            routineDateTimeMillis = nowPlusDays(1),
-            examDateTimeMillis = nowPlusDays(2)
+            title = "Relire notes Électronique 2",
+            description = "Résumé + fiches",
+            routineDateTimeMillis = at(3, 14),     // dans 3 jours 14h00
+            examDateTimeMillis = examAt(10, 8)     // dans 10 jours 08h00 -> faible
         ),
         RoutineVM(
             id = 6,
-            title = "Projet synthèse - planning",
-            description = "Découper tâches",
-            routineDateTimeMillis = nowPlusDays(2),
-            examDateTimeMillis = nowPlusDays(3)
+            title = "Réviser Chimie",
+            description = "Équilibres + quiz",
+            routineDateTimeMillis = at(1, 8),      // demain 08h00
+            examDateTimeMillis = examAt(5, 19)     // dans 5 jours 19h00 -> faible/moyenne
         ),
         RoutineVM(
             id = 7,
             title = "Réviser Automatique",
             description = "Lieu des racines",
-            routineDateTimeMillis = nowPlusDays(4),
-            examDateTimeMillis = nowPlusDays(4)
+            routineDateTimeMillis = at(4, 14),     // dans 4 jours 14h00
+            examDateTimeMillis = examAt(6, 16)     // dans 6 jours 16h00
         ),
         RoutineVM(
             id = 8,
             title = "Lecture - Bases Kotlin",
             description = "Compose state + VM",
-            routineDateTimeMillis = nowPlusDays(6),
-            examDateTimeMillis = nowPlusDays(30)
+            routineDateTimeMillis = at(6, 8),      // dans 6 jours 08h00
+            examDateTimeMillis = examAt(30, 13)    // dans 30 jours 13h00
         ),
         RoutineVM(
             id = 9,
-            title = "Réviser Statistiques",
-            description = "Probabilités + exercices",
-            routineDateTimeMillis = nowPlusDays(1),
-            examDateTimeMillis = nowPlusDays(1)
+            title = "Faire lab1 Réseaux",
+            description = "Configurer + rapport",
+            routineDateTimeMillis = at(2, 16),     // dans 2 jours 16h00
+            examDateTimeMillis = examAt(12, 19)    // dans 12 jours 19h00
         ),
         RoutineVM(
             id = 10,
             title = "Préparer présentation",
             description = "Slides + speech",
-            routineDateTimeMillis = nowPlusDays(7),
-            examDateTimeMillis = nowPlusDays(7)
+            routineDateTimeMillis = at(5, 14),     // dans 5 jours 14h00
+            examDateTimeMillis = examAt(8, 16)     // dans 8 jours 16h00
         ),
-
     )
 
     fun getRoutines(): List<RoutineVM> {
@@ -116,13 +139,12 @@ object RoutineUtils {
      * - Élevée : examen <= 24h
      * - Moyenne : examen <= 72h
      * - Faible : au-delà
-     * - Si examen null : Faible (par défaut)
+     * - Si examen null : Faible
      */
     private fun computePriorityFromExam(nowMillis: Long, examMillis: Long?): PriorityType {
         if (examMillis == null) return PriorityType.Faible
         val diff = examMillis - nowMillis
 
-        // si examen déjà passé -> on le considère faible (tu peux changer plus tard)
         if (diff <= 0) return PriorityType.Faible
 
         val hours = TimeUnit.MILLISECONDS.toHours(diff)
@@ -139,10 +161,4 @@ object RoutineUtils {
         PriorityType.Moyenne -> 1
         PriorityType.Faible -> 2
     }
-
-    private fun nowPlusHours(h: Int): Long =
-        System.currentTimeMillis() + TimeUnit.HOURS.toMillis(h.toLong())
-
-    private fun nowPlusDays(d: Int): Long =
-        System.currentTimeMillis() + TimeUnit.DAYS.toMillis(d.toLong())
 }

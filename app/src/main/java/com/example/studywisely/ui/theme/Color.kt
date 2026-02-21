@@ -9,3 +9,6 @@ val PurpleMain = Color(0xFF7A0DCE)
 val PurpleText = Color(0xFF6815A8)
 
 val White = Color(0xFFFFFFFF)
+
+val LightLavender = Color(0xFFF4EFF8)
+

@@ -1,88 +1,77 @@
 package com.example.studywisely.presentation.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.studywisely.data.model.RoutineVM
-import com.example.studywisely.ui.theme.PurpleMain
+import com.example.studywisely.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun RoutineCard(
     routine: RoutineVM,
-    onDelete: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    onDelete: (Int) -> Unit
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
+    val sdf = SimpleDateFormat("dd MMM yyyy • HH:mm", Locale.FRENCH)
 
+    val routineFormatted = routine.routineDateTimeMillis?.let { sdf.format(Date(it)) } ?: "Non définie"
+    val examFormatted = routine.examDateTimeMillis?.let { sdf.format(Date(it)) } ?: "Non définie"
+
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = White),
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             Column(modifier = Modifier.weight(1f)) {
 
                 Text(
                     text = routine.title,
-                    style = MaterialTheme.typography.titleMedium
+                    color = PurpleMain,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp
                 )
-
-                if (routine.description.isNotBlank()) {
-                    Text(
-                        text = routine.description,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
 
                 Text(
                     text = "Priorité: ${routine.priority}",
-                    style = MaterialTheme.typography.bodySmall
+                    fontSize = 18.sp
                 )
 
-                routine.examDateTimeMillis?.let {
-                    Text(
-                        text = "Examen: ${formatDateTime(it)}",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
+                Text(
+                    text = "À faire le: $routineFormatted",
+                    fontSize = 18.sp
+                )
+
+                Text(
+                    text = "Examen/Livrable: $examFormatted",
+                    fontSize = 18.sp
+                )
             }
 
-            // BOUTON POUBELLE VIOLET (version compatible)
             IconButton(
-                onClick = { onDelete(routine.id) },
-                modifier = Modifier
-                    .size(42.dp)
+                onClick = { onDelete(routine.id) }
             ) {
-                Surface(
-                    shape = CircleShape,
-                    color = PurpleMain
-                ) {
-                    Box(
-                        modifier = Modifier.padding(8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Supprimer",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Supprimer",
+                    tint = PurpleMain,
+                    modifier = Modifier.size(32.dp)
+                )
             }
         }
     }
-}
-
-private fun formatDateTime(millis: Long): String {
-    val sdf = SimpleDateFormat("EEE d MMM • HH:mm", Locale.FRENCH)
-    return sdf.format(Date(millis))
 }

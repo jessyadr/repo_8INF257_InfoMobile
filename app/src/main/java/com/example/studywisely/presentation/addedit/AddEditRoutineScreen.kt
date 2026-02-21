@@ -13,9 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.studywisely.ui.theme.PurpleMain
+import com.example.studywisely.ui.theme.PurpleText
 import com.example.studywisely.viewmodel.AddEditRoutineEvent
 import com.example.studywisely.viewmodel.AddEditRoutineViewModel
 import java.text.SimpleDateFormat
@@ -38,43 +42,30 @@ fun AddEditRoutineScreen(
         ) {
 
             Text(
-                "Ajouter/modifier une routine",
-                color = Color(0xFF6815A8)
+                "Ajouter / Modifier une routine",
+                color = PurpleMain,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
             )
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "Nom",
                 value = routine.title,
+                placeholder = "Veuillez entrer le nom de votre routine",
                 onValueChange = {
                     viewModel.onEvent(AddEditRoutineEvent.EnteredTitle(it))
-                },
-                placeholder = {
-                    Text("Veuillez entrer le nom de votre routine")
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = colors(
-                    focusedContainerColor = Color(0xFFFAF5FF),
-                    unfocusedContainerColor = Color(0xFFFAF5FF)
-                )
+                }
             )
 
-            OutlinedTextField(
+            LabeledTextField(
+                label = "Description",
                 value = routine.description,
+                placeholder = "Inscrivez une courte description",
                 onValueChange = {
                     viewModel.onEvent(AddEditRoutineEvent.EnteredDescription(it))
-                },
-                placeholder = {
-                    Text("Inscrivez une courte description")
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = colors(
-                    focusedContainerColor = Color(0xFFFAF5FF),
-                    unfocusedContainerColor = Color(0xFFFAF5FF)
-                )
+                }
             )
 
-            // DATE ROUTINE
             DateTimePickerField(
                 label = "Date et heure de la routine",
                 placeholder = "Choisir date et heure",
@@ -84,7 +75,6 @@ fun AddEditRoutineScreen(
                 }
             )
 
-            // 📅 DATE EXAMEN
             DateTimePickerField(
                 label = "Date d'examen ou livrable prévu",
                 placeholder = "Veuillez inscrire la date d'examen ou livrable prévu",
@@ -109,9 +99,54 @@ fun AddEditRoutineScreen(
                 ),
                 shape = RoundedCornerShape(20.dp)
             ) {
-                Text("Enregistrer la routine", color = Color.White)
+                Text(
+                    "Enregistrer la routine",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun LabeledTextField(
+    label: String,
+    value: String,
+    placeholder: String,
+    onValueChange: (String) -> Unit
+) {
+    val shape = RoundedCornerShape(16.dp)
+
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+
+        Text(
+            text = label,
+            color = PurpleMain,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp
+        )
+
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = PurpleText,
+                    fontSize = 18.sp
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = shape,
+            colors = colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent
+            )
+        )
     }
 }
 
@@ -124,6 +159,7 @@ private fun DateTimePickerField(
 ) {
     val context = LocalContext.current
     val calendar = remember { Calendar.getInstance() }
+    val shape = RoundedCornerShape(16.dp)
 
     val formatted = selectedMillis?.let {
         val sdf = SimpleDateFormat("dd MMM yyyy • HH:mm", Locale.FRENCH)
@@ -132,14 +168,32 @@ private fun DateTimePickerField(
 
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
 
-        Text(text = label, color = Color(0xFF6815A8))
+        Text(
+            text = label,
+            color = PurpleMain,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp
+        )
 
         OutlinedTextField(
             value = formatted,
             onValueChange = {},
             readOnly = true,
-            placeholder = { Text(placeholder) },
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = PurpleText,
+                    fontSize = 18.sp
+                )
+            },
             modifier = Modifier.fillMaxWidth(),
+            shape = shape,
+            colors = colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent
+            ),
             trailingIcon = {
                 IconButton(
                     onClick = {
