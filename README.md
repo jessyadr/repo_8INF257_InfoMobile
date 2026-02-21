@@ -1,212 +1,87 @@
-# StudyWisely – Application mobile de gestion de routines d’étude
+# StudyWisely – PP1
+8INF257 – Informatique mobile  
+Hiver 2026  
 
-## Projet 8INF257 – Informatique mobile (Hiver 2026)
+## Objectif du projet (PP1)
 
-### Description générale
+Ce premier prototype (PP1) a pour objectif de poser les bases de l’application **StudyWisely**, une application mobile permettant la création et la gestion de routines d’étude simples.
 
-StudyWisely est une application Android développée en Kotlin avec Jetpack Compose. Le projet vise à proposer un outil simple permettant aux étudiants de structurer leurs révisions à l’aide de routines planifiées. L’application permet de créer, visualiser et organiser des tâches de révision afin d’améliorer la planification du travail académique.
+L’objectif principal est de mettre en place :
 
-Le développement est organisé en phases (PP1, PP2, etc.), où chaque partie ajoute progressivement de la logique et des fonctionnalités à une base d’interface initialement statique.
-
----
-
-## Structure générale du projet
-
-Le projet suit une architecture de type MVVM (Model – View – ViewModel), afin de séparer clairement :
-
-* la logique métier
-* l’interface utilisateur
-* la gestion des données
-
-Cette séparation permet une meilleure organisation du code et facilite les modifications futures.
+- La structure initiale du projet Android
+- Une interface utilisateur fonctionnelle
+- L’affichage dynamique de données
+- Une architecture propre avec ViewModel
 
 ---
 
-## Organisation des dossiers
+## 1. Prototype Figma
 
-### data/
+Un prototype interactif a été réalisé sur Figma afin de :
 
-Contient les éléments liés aux données et aux modèles.
+- Définir la structure visuelle de l’application
+- Valider l’expérience utilisateur
+- Simuler la navigation entre les écrans
 
-* **model/**
+Le design comprend :
 
-  * `RoutineVM.kt`
-    Représente une routine d’étude. Chaque routine possède :
+- Une page d’accueil affichant la liste des routines
+- Un bouton pour ajouter une nouvelle routine (fonctionnalité future)
 
-    * un identifiant unique
-    * un titre
-    * une description
-    * un label de temps (date/heure)
-    * un niveau de priorité
-
-  * `PriorityType.kt`
-    Définit les niveaux de priorité possibles :
-
-    * Faible
-    * Moyenne
-    * Élevée
-
-* **util/**
-
-  * `RoutineUtils.kt`
-    Sert de stockage temporaire en mémoire.
-    Une liste mutable de routines est conservée localement pour simuler une base de données.
-    Ce composant permet :
-
-    * d’obtenir toutes les routines
-    * d’ajouter ou modifier une routine (upsert)
-    * de supprimer une routine
-
-Ce choix permet de tester la logique sans base de données réelle.
+Le visuel du prototype a été respecté dans l’implémentation Android.
 
 ---
 
-### viewmodel/
+## 2. Configuration initiale
 
-Contient la logique applicative intermédiaire entre l’interface et les données.
+Le projet a été créé avec :
 
-* `AddEditRoutineViewModel.kt`
-  Gère l’état du formulaire d’ajout/modification.
-  Il met à jour les champs en fonction des actions de l’utilisateur et déclenche l’enregistrement via `RoutineUtils`.
+- **Android Studio**
+- **Kotlin**
+- **Jetpack Compose**
+- Architecture MVVM simplifiée
 
-* `AddEditRoutineEvent.kt`
-  Définit les événements possibles du formulaire :
+Configuration réalisée :
 
-  * saisie du titre
-  * saisie de la description
-  * saisie du temps
-  * choix de la priorité
-  * sauvegarde de la routine
-
-* `ListRoutinesViewModel.kt`
-  Gère l’affichage de la liste des routines.
-  Il récupère les données depuis `RoutineUtils` et permet de rafraîchir la liste.
-
-Le rôle principal des ViewModels est de centraliser la logique et d’éviter que l’interface accède directement aux données.
+- Création du projet Android
+- Activation de Jetpack Compose
+- Organisation des packages :
+  - `navigation`
+  - `presentation`
+  - `viewmodel`
+  - `data`
+  - `ui.theme`
 
 ---
 
-### presentation/
+## 3. Interface utilisateur
 
-Contient l’interface utilisateur construite avec Jetpack Compose.
+L’interface a été développée entièrement avec **Jetpack Compose**.
 
-* **list/**
+### Écran principal :
 
-  * `RoutinesListScreen.kt`
-    Écran principal affichant toutes les routines sous forme de liste.
-    Les données proviennent de `ListRoutinesViewModel`.
-
-* **addedit/**
-
-  * `AddEditRoutineScreen.kt`
-    Écran permettant de créer une nouvelle routine.
-    Les champs du formulaire sont reliés au `AddEditRoutineViewModel`.
-
-* **components/**
-
-  * `RoutineCard.kt`
-    Composant visuel représentant une routine dans la liste :
-
-    * titre
-    * heure
-    * priorité
+- Affichage d’une liste de routines existantes
+- Chaque routine est représentée par un composant `RoutineCard`
+- Design conforme au prototype Figma
+- Utilisation d’un `Scaffold`
+- Respect du thème personnalisé (couleurs + typographie)
 
 ---
 
-### navigation/
+## 4. Gestion des routines
 
-Gère la navigation entre les écrans.
+Les routines sont actuellement :
 
-* `Screen.kt`
-  Définit les routes de navigation (liste, ajout).
+- Stockées dans un fichier utilitaire (`RoutineUtils`)
+- Chargées via un `ViewModel`
+- Exposées via un `State<List<RoutineVM>>`
+- Rafraîchies dynamiquement
 
-* `AppNavHost.kt`
-  Configure la navigation Compose entre les écrans.
+Architecture utilisée :
 
----
-
-### ui/theme/
-
-Gère l’apparence globale de l’application.
-
-* `Color.kt` : couleurs principales
-* `Theme.kt` : configuration du thème Material
-* `Type.kt` : typographie et police utilisée
+- `ListRoutinesViewModel`
+- Séparation UI / logique
+- Respect des bonnes pratiques Compose
 
 ---
 
-## Fonctionnement global de l’application
-
-1. L’écran principal affiche une liste de routines.
-2. Un bouton permet d’accéder à l’écran d’ajout.
-3. Le formulaire permet de saisir :
-
-   * un nom de routine
-   * une description
-   * une date/heure
-4. Lors de l’enregistrement :
-
-   * les données sont envoyées au ViewModel
-   * le ViewModel enregistre la routine via `RoutineUtils`
-   * l’application revient à l’écran principal
-5. La liste est rafraîchie pour afficher la nouvelle routine.
-
----
-
-## Partie du PP2 déjà intégrée
-
-Une partie fonctionnelle du PP2 a été ajoutée, notamment :
-
-* liaison entre l’interface et les ViewModels
-* gestion des événements du formulaire
-* création réelle d’une routine
-* insertion dans la liste mémoire
-* rafraîchissement dynamique de l’écran principal
-
-Le système permet maintenant d’ajouter une routine et de la voir apparaître dans la liste sans redémarrer l’application.
-
----
-
-## Choix techniques
-
-* Kotlin comme langage principal
-* Jetpack Compose pour l’interface
-* Architecture MVVM pour structurer le projet
-* Navigation Compose pour gérer les écrans
-* Stockage temporaire en mémoire (en attendant une base de données)
-
----
-
-## Logique importante à comprendre
-
-* L’interface ne modifie jamais directement les données.
-* Les interactions passent toujours par les ViewModels.
-* `RoutineUtils` agit comme une fausse base de données.
-* Le rafraîchissement de la liste est nécessaire pour refléter les nouvelles données.
-* Chaque routine possède un identifiant généré automatiquement.
-
----
-
-## Évolutions prévues
-
-Plusieurs extensions sont prévues pour enrichir l’application :
-
-* ajout d’une date d’examen associée à une routine
-* priorisation automatique des tâches selon la proximité des évaluations
-* système de notifications
-* stockage persistant (Room, DataStore ou Firebase)
-
-La structure actuelle permet d’intégrer ces fonctionnalités sans modifier l’architecture de base.
-
----
-
-## État actuel
-
-L’application permet actuellement :
-
-* d’afficher une liste de routines
-* de créer une nouvelle routine
-* de sauvegarder les données en mémoire
-* de visualiser immédiatement les ajouts dans la liste
-
-La base technique du projet est maintenant en place pour continuer les phases suivantes.
