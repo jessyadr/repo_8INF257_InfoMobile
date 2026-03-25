@@ -1,5 +1,6 @@
 package com.example.studywisely.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -18,7 +19,8 @@ import java.util.*
 @Composable
 fun RoutineCard(
     routine: RoutineVM,
-    onDelete: (Int) -> Unit
+    onDelete: (Int) -> Unit,
+    onClick: () -> Unit
 ) {
     val sdf = SimpleDateFormat("dd MMM yyyy • HH:mm", Locale.FRENCH)
 
@@ -28,7 +30,9 @@ fun RoutineCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = White),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
