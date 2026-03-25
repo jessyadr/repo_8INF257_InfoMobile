@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,12 +29,12 @@ fun RoutinesListScreen(
 
     val routines = viewModel.routines.value
 
-    var showDialog by remember { mutableStateOf(false) }
-    var routineToDelete by remember { mutableStateOf<Int?>(null) }
-
     LaunchedEffect(Unit) {
         viewModel.refresh()
     }
+
+    var showDialog by remember { mutableStateOf(false) }
+    var routineToDelete by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
         containerColor = BackgroundMain,
@@ -111,11 +112,13 @@ fun RoutinesListScreen(
                         onDelete = { id ->
                             routineToDelete = id
                             showDialog = true
+                        },
+                        onClick = {
+                            navController.navigate("add_edit_routine?routineId=${routine.id}")
                         }
                     )
                 }
             }
-
 
             if (showDialog) {
 
@@ -166,7 +169,11 @@ fun RoutinesListScreen(
                                     ),
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
-                                    Text("Oui", color = White, fontSize = 22.sp, fontWeight = FontWeight.Bold
+                                    Text(
+                                        "Oui",
+                                        color = White,
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
 
@@ -179,7 +186,11 @@ fun RoutinesListScreen(
                                     ),
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
-                                    Text("Non", color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold
+                                    Text(
+                                        "Non",
+                                        color = Color.Black,
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
                             }

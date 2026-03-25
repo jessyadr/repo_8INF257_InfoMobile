@@ -1,23 +1,34 @@
 package com.example.studywisely.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import com.example.studywisely.data.local.RoutineDatabaseHelper
 import com.example.studywisely.data.model.RoutineVM
-import com.example.studywisely.data.util.RoutineUtils
 
-class ListRoutinesViewModel : ViewModel() {
+class ListRoutinesViewModel(application: Application) : AndroidViewModel(application) {
 
-    // 2 états (privé mutable / public immuable) comme dans le cours
-    private val _routines = mutableStateOf(RoutineUtils.getRoutines())
+    private val db = RoutineDatabaseHelper(application)
+
+    private val _routines = mutableStateOf<List<RoutineVM>>(emptyList())
     val routines: State<List<RoutineVM>> = _routines
 
-    fun refresh() {
-        _routines.value = RoutineUtils.getRoutines()
+    init {
+        loadRoutines()
+    }
+
+    private fun loadRoutines() {
+        _routines.value = db.getAllRoutines()
+            .sortedBy { it.examDateTimeMillis ?: Long.MAX_VALUE }
     }
 
     fun deleteRoutine(id: Int) {
-        RoutineUtils.deleteRoutine(id)
-        refresh()
+        db.deleteRoutine(id)
+        loadRoutines()
+    }
+
+    fun refresh() {
+        loadRoutines()
     }
 }
