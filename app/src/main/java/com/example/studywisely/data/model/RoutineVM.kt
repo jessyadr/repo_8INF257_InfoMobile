@@ -1,9 +1,7 @@
 package com.example.studywisely.data.model
 
-import kotlin.random.Random
-
 data class RoutineVM(
-    val id: Int = Random.nextInt(),
+    val id: Int = 0,
     val title: String = "",
     val description: String = "",
 

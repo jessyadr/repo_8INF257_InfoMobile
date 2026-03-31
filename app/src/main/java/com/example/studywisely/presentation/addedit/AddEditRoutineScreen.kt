@@ -34,10 +34,10 @@ fun AddEditRoutineScreen(
     val routine = viewModel.routine.value
 
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
-    val routineId = navBackStackEntry?.arguments?.getInt("routineId")
+    val routineId = navBackStackEntry?.arguments?.getInt("routineId") ?: -1
 
     LaunchedEffect(routineId) {
-        if (routineId != null && routineId != -1) {
+        if (routineId != -1) {
             viewModel.loadRoutine(routineId)
         }
     }
@@ -52,7 +52,7 @@ fun AddEditRoutineScreen(
         ) {
 
             Text(
-                "Ajouter / Modifier une routine",
+                text = "Ajouter / Modifier une routine",
                 color = PurpleMain,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp
@@ -94,7 +94,7 @@ fun AddEditRoutineScreen(
                 }
             )
 
-            Spacer(Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Button(
                 onClick = {
@@ -110,7 +110,7 @@ fun AddEditRoutineScreen(
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
-                    "Enregistrer la routine",
+                    text = "Enregistrer la routine",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium
@@ -223,6 +223,8 @@ private fun DateTimePickerField(
 
                                         calendar.set(Calendar.HOUR_OF_DAY, hour)
                                         calendar.set(Calendar.MINUTE, minute)
+                                        calendar.set(Calendar.SECOND, 0)
+                                        calendar.set(Calendar.MILLISECOND, 0)
 
                                         onPicked(calendar.timeInMillis)
                                     },
@@ -238,7 +240,10 @@ private fun DateTimePickerField(
                         ).show()
                     }
                 ) {
-                    Icon(Icons.Default.DateRange, contentDescription = "Choisir date")
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Choisir date"
+                    )
                 }
             }
         )
