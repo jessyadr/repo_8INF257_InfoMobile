@@ -26,7 +26,6 @@ fun RoutinesListScreen(
     navController: NavController,
     viewModel: ListRoutinesViewModel = viewModel()
 ) {
-
     val routines = viewModel.routines.value
 
     LaunchedEffect(Unit) {
@@ -114,21 +113,19 @@ fun RoutinesListScreen(
                             showDialog = true
                         },
                         onClick = {
-                            navController.navigate("add_edit_routine?routineId=${routine.id}")
+                            navController.navigate("${Screen.AddEditRoutineScreen.route}?routineId=${routine.id}")
                         }
                     )
                 }
             }
 
             if (showDialog) {
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Black.copy(alpha = 0.75f)),
                     contentAlignment = Alignment.Center
                 ) {
-
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
@@ -138,12 +135,10 @@ fun RoutinesListScreen(
                             .padding(24.dp)
                             .fillMaxWidth(0.85f)
                     ) {
-
                         Column(
                             modifier = Modifier.padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
                             Text(
                                 "Voulez-vous vraiment supprimer cette routine ?",
                                 color = Color.Black,
@@ -156,7 +151,6 @@ fun RoutinesListScreen(
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-
                                 Button(
                                     onClick = {
                                         routineToDelete?.let {

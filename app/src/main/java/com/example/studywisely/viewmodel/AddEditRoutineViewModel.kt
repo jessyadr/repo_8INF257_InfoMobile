@@ -34,17 +34,18 @@ class AddEditRoutineViewModel(application: Application) : AndroidViewModel(appli
             }
 
             is AddEditRoutineEvent.PickedRoutineDateTime -> {
-                _routine.value =
-                    _routine.value.copy(routineDateTimeMillis = event.millis)
+                _routine.value = _routine.value.copy(
+                    routineDateTimeMillis = event.millis
+                )
             }
 
             is AddEditRoutineEvent.PickedExamDateTime -> {
-                _routine.value =
-                    _routine.value.copy(examDateTimeMillis = event.millis)
+                _routine.value = _routine.value.copy(
+                    examDateTimeMillis = event.millis
+                )
             }
 
             AddEditRoutineEvent.SaveRoutine -> {
-
                 val now = System.currentTimeMillis()
                 val examDate = _routine.value.examDateTimeMillis
 
@@ -55,7 +56,6 @@ class AddEditRoutineViewModel(application: Application) : AndroidViewModel(appli
                 }
 
                 val priority = when {
-                    diffDays <= 0 -> PriorityType.Elevee
                     diffDays <= 3 -> PriorityType.Elevee
                     diffDays <= 7 -> PriorityType.Moyenne
                     else -> PriorityType.Faible
@@ -63,13 +63,13 @@ class AddEditRoutineViewModel(application: Application) : AndroidViewModel(appli
 
                 val updatedRoutine = _routine.value.copy(priority = priority)
 
-                if (_routine.value.id == 0) {
+                if (updatedRoutine.id == 0) {
                     db.insertRoutine(updatedRoutine)
                 } else {
                     db.updateRoutine(updatedRoutine)
                 }
 
-                _routine.value = RoutineVM(priority = PriorityType.Moyenne)
+                _routine.value = RoutineVM()
             }
         }
     }

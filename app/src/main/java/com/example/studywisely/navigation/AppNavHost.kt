@@ -17,15 +17,12 @@ fun AppNavHost() {
         navController = navController,
         startDestination = Screen.RoutinesListScreen.route
     ) {
-
         composable(Screen.RoutinesListScreen.route) {
-            RoutinesListScreen(
-                navController = navController
-            )
+            RoutinesListScreen(navController = navController)
         }
 
         composable(
-            route = "add_edit_routine?routineId={routineId}",
+            route = "${Screen.AddEditRoutineScreen.route}?routineId={routineId}",
             arguments = listOf(
                 navArgument("routineId") {
                     type = NavType.IntType
@@ -33,9 +30,7 @@ fun AppNavHost() {
                 }
             )
         ) {
-            AddEditRoutineScreen(
-                navController = navController
-            )
+            AddEditRoutineScreen(navController = navController)
         }
     }
 }
