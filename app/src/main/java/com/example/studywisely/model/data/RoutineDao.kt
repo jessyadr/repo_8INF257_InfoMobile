@@ -1,7 +1,6 @@
-package com.example.studywisely.data.local
+package com.example.studywisely.model.data
 
 import androidx.room.*
-import com.example.studywisely.data.model.RoutineEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

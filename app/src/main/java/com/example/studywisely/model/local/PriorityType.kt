@@ -1,7 +1,7 @@
-package com.example.studywisely.data.model
+package com.example.studywisely.model.local
 
 sealed class PriorityType(val label: String) {
     data object Faible : PriorityType("Faible")
     data object Moyenne : PriorityType("Moyenne")
-    data object Elevee : PriorityType("Élevée")
+    data object Elevee : PriorityType("Elevee")
 }

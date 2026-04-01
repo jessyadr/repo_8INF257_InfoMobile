@@ -1,4 +1,4 @@
-package com.example.studywisely.presentation.addedit
+package com.example.studywisely.ui.screens
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -16,20 +16,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.studywisely.ui.theme.PurpleMain
 import com.example.studywisely.ui.theme.PurpleText
-import com.example.studywisely.viewmodel.AddEditRoutineEvent
-import com.example.studywisely.viewmodel.AddEditRoutineViewModel
+import com.example.studywisely.viewmodel.add_edit_routine.AddEditRoutineEvent
+import com.example.studywisely.viewmodel.add_edit_routine.AddEditRoutineViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun AddEditRoutineScreen(
     navController: NavController,
-    viewModel: AddEditRoutineViewModel = viewModel()
+    viewModel: AddEditRoutineViewModel
 ) {
     val routine = viewModel.routine.value
 

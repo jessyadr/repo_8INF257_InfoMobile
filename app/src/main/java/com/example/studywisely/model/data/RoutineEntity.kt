@@ -1,8 +1,8 @@
-package com.example.studywisely.data.model
+package com.example.studywisely.model.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.studywisely.data.model.PriorityType
+import com.example.studywisely.model.local.PriorityType
 
 @Entity(tableName = "routines")
 data class RoutineEntity(

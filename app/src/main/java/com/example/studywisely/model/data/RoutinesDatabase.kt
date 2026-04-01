@@ -1,9 +1,9 @@
-package com.example.studywisely.data.local
+package com.example.studywisely.model.data
 
 import androidx.room.*
-import com.example.studywisely.data.model.RoutineEntity
 
 @Database(entities = [RoutineEntity::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class RoutinesDatabase : RoomDatabase() {
     abstract val dao: RoutineDao
 

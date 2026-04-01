@@ -1,4 +1,4 @@
-package com.example.studywisely.presentation.list
+package com.example.studywisely.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,30 +7,24 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.studywisely.navigation.Screen
-import com.example.studywisely.presentation.components.RoutineCard
+import com.example.studywisely.ui.navigation.Screen
+import com.example.studywisely.ui.components.RoutineCard
 import com.example.studywisely.ui.theme.*
-import com.example.studywisely.viewmodel.ListRoutinesViewModel
+import com.example.studywisely.viewmodel.routines_list.ListRoutinesViewModel
 
 @Composable
 fun RoutinesListScreen(
     navController: NavController,
-    viewModel: ListRoutinesViewModel = viewModel()
+    viewModel: ListRoutinesViewModel
 ) {
     val routines = viewModel.routines.value
-
-    LaunchedEffect(Unit) {
-        viewModel.refresh()
-    }
 
     var showDialog by remember { mutableStateOf(false) }
     var routineToDelete by remember { mutableStateOf<Int?>(null) }
@@ -105,7 +99,7 @@ fun RoutinesListScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(vertical = 12.dp)
             ) {
-                items(routines, key = { it.id }) { routine ->
+                items(routines, key = { it.id!! }) { routine ->
                     RoutineCard(
                         routine = routine,
                         onDelete = { id ->

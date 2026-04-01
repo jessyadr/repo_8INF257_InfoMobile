@@ -1,4 +1,4 @@
-package com.example.studywisely.navigation
+package com.example.studywisely.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,11 +6,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.studywisely.presentation.addedit.AddEditRoutineScreen
-import com.example.studywisely.presentation.list.RoutinesListScreen
+import com.example.studywisely.ui.screens.AddEditRoutineScreen
+import com.example.studywisely.ui.screens.RoutinesListScreen
+import com.example.studywisely.viewmodel.add_edit_routine.AddEditRoutineViewModel
+import com.example.studywisely.viewmodel.routines_list.ListRoutinesViewModel
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(listRoutinesViewModel: ListRoutinesViewModel,
+               addEditRoutineViewModel: AddEditRoutineViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -18,7 +22,7 @@ fun AppNavHost() {
         startDestination = Screen.RoutinesListScreen.route
     ) {
         composable(Screen.RoutinesListScreen.route) {
-            RoutinesListScreen(navController = navController)
+            RoutinesListScreen(navController = navController, viewModel = listRoutinesViewModel)
         }
 
         composable(
@@ -30,7 +34,7 @@ fun AppNavHost() {
                 }
             )
         ) {
-            AddEditRoutineScreen(navController = navController)
+            AddEditRoutineScreen(navController = navController, viewModel = addEditRoutineViewModel)
         }
     }
 }

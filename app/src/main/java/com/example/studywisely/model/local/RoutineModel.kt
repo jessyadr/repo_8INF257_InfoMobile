@@ -1,6 +1,8 @@
-package com.example.studywisely.data.model
+package com.example.studywisely.model.local
 
-data class RoutineVM(
+import com.example.studywisely.model.data.RoutineEntity
+
+data class RoutineModel(
     val id: Int? = null,
     val title: String = "",
     val description: String = "",
@@ -15,8 +17,8 @@ data class RoutineVM(
     val priority: PriorityType = PriorityType.Moyenne
 ) {
     companion object{
-        fun fromEntity(entity: RoutineEntity): RoutineVM {
-            return RoutineVM(
+        fun fromEntity(entity: RoutineEntity): RoutineModel {
+            return RoutineModel(
                 id = entity.id,
                 title = entity.title,
                 description = entity.description ?: "",
@@ -26,7 +28,7 @@ data class RoutineVM(
             )
         }
 
-        fun toEntity(vm: RoutineVM): RoutineEntity {
+        fun toEntity(vm: RoutineModel): RoutineEntity {
             return RoutineEntity(
                 id = vm.id,
                 title = vm.title,

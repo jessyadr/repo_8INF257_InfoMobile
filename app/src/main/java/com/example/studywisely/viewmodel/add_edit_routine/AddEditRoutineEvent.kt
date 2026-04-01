@@ -1,4 +1,4 @@
-package com.example.studywisely.viewmodel
+package com.example.studywisely.viewmodel.add_edit_routine
 
 sealed class AddEditRoutineEvent {
 

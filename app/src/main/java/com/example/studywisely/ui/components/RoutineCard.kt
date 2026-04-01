@@ -1,4 +1,4 @@
-package com.example.studywisely.presentation.components
+package com.example.studywisely.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,14 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.studywisely.data.model.RoutineVM
+import com.example.studywisely.model.local.RoutineModel
 import com.example.studywisely.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun RoutineCard(
-    routine: RoutineVM,
+    routine: RoutineModel,
     onDelete: (Int) -> Unit,
     onClick: () -> Unit
 ) {
@@ -67,7 +67,9 @@ fun RoutineCard(
             }
 
             IconButton(
-                onClick = { onDelete(routine.id) }
+                onClick = {
+                    routine.id?.let { onDelete(it) }
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,

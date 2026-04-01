@@ -1,4 +1,4 @@
-package com.example.studywisely.navigation
+package com.example.studywisely.ui.navigation
 
 sealed class Screen(val route: String) {
     data object RoutinesListScreen : Screen("routines_list_screen")
