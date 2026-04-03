@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.studywisely.model.local.PriorityType
 import com.example.studywisely.model.local.RoutineModel
 import com.example.studywisely.repository.RoutineRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewModel() {
@@ -15,7 +14,7 @@ class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewM
     val routine: State<RoutineModel> = _routine
 
     fun loadRoutine(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val routine = repository.getRoutineById(id)
             _routine.value = routine ?: RoutineModel()
         }
@@ -45,7 +44,7 @@ class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewM
             }
 
             AddEditRoutineEvent.SaveRoutine -> {
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     val current = _routine.value
                     val now = System.currentTimeMillis()
                     val examDate = current.examDateTimeMillis
