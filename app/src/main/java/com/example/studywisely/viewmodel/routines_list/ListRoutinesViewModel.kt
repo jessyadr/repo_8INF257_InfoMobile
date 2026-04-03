@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studywisely.model.local.RoutineModel
 import com.example.studywisely.repository.RoutineRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ListRoutinesViewModel(private val repository: RoutineRepository) : ViewModel() {
@@ -18,7 +17,7 @@ class ListRoutinesViewModel(private val repository: RoutineRepository) : ViewMod
     }
 
     private fun loadRoutines() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch{
             repository.getAllRoutines().collect { list ->
                 _routines.value = list
             }
@@ -26,7 +25,7 @@ class ListRoutinesViewModel(private val repository: RoutineRepository) : ViewMod
     }
 
     fun deleteRoutine(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.deleteRoutine(id)
         }
     }
