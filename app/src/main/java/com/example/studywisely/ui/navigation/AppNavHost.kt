@@ -1,5 +1,5 @@
+import com.example.studywisely.ui.screens.MapPickerScreen
 package com.example.studywisely.ui.navigation
-
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -36,5 +36,8 @@ fun AppNavHost(listRoutinesViewModel: ListRoutinesViewModel,
         ) {
             AddEditRoutineScreen(navController = navController, viewModel = addEditRoutineViewModel)
         }
+        composable(Screen.MapPickerScreen.route) {
+    MapPickerScreen(navController = navController)
+}
     }
 }
