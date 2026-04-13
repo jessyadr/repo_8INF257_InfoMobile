@@ -1,5 +1,4 @@
 package com.example.studywisely.ui.screens
-
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.foundation.layout.*
@@ -94,7 +93,19 @@ fun AddEditRoutineScreen(
             )
 
             Spacer(modifier = Modifier.height(10.dp))
+            Button(
+    onClick = {
+        navController.navigate(Screen.MapPickerScreen.route)
+    }
+) {
+    Text("Choisir un lieu sur la carte")
+}
 
+Button(
+    onClick = {
+        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
+        navController.popBackStack()
+    },
             Button(
                 onClick = {
                     viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
