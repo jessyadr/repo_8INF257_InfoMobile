@@ -39,9 +39,17 @@ fun MapPickerScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
+            navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.set("selected_latitude", latitude)
+
+            navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.set("selected_longitude", longitude)
+
             navController.popBackStack()
         }) {
-            Text("Valider et revenir")
+            Text(text = "Valider et revenir")
         }
     }
 }

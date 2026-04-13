@@ -14,7 +14,9 @@ data class RoutineModel(
     val examDateTimeMillis: Long? = null,
 
     // Priorité (calculée selon examDateTimeMillis, mais stockée aussi)
-    val priority: PriorityType = PriorityType.Moyenne
+    val priority: PriorityType = PriorityType.Moyenne,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 ) {
     companion object{
         fun fromEntity(entity: RoutineEntity): RoutineModel {
@@ -24,7 +26,9 @@ data class RoutineModel(
                 description = entity.description ?: "",
                 routineDateTimeMillis = entity.routineDateTimeMillis,
                 examDateTimeMillis = entity.examDateTimeMillis,
-                priority = entity.priority
+                priority = entity.priority,
+                        latitude = entity.latitude,
+                longitude = entity.longitude
             )
         }
 
@@ -35,7 +39,9 @@ data class RoutineModel(
                 description = vm.description.ifEmpty { null },
                 routineDateTimeMillis = vm.routineDateTimeMillis,
                 examDateTimeMillis = vm.examDateTimeMillis,
-                priority = vm.priority
+                priority = vm.priority,
+                latitude = vm.latitude,
+                longitude = vm.longitude
             )
         }
     }

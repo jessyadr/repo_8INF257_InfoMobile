@@ -1,5 +1,5 @@
-import com.example.studywisely.ui.screens.MapPickerScreen
 package com.example.studywisely.ui.navigation
+import com.example.studywisely.ui.screens.MapPickerScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost

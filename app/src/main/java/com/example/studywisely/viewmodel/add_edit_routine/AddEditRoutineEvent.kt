@@ -9,6 +9,9 @@ sealed class AddEditRoutineEvent {
     data class PickedRoutineDateTime(val millis: Long?) : AddEditRoutineEvent()
 
     data class PickedExamDateTime(val millis: Long?) : AddEditRoutineEvent()
-
+    data class PickedLocation(
+        val latitude: Double,
+        val longitude: Double
+    ) : AddEditRoutineEvent()
     object SaveRoutine : AddEditRoutineEvent()
 }

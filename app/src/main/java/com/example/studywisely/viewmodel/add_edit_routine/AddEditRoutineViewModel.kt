@@ -42,7 +42,12 @@ class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewM
                     examDateTimeMillis = event.millis
                 )
             }
-
+            is AddEditRoutineEvent.PickedLocation -> {
+                _routine.value = _routine.value.copy(
+                    latitude = event.latitude,
+                    longitude = event.longitude
+                )
+            }
             AddEditRoutineEvent.SaveRoutine -> {
                 viewModelScope.launch {
                     val current = _routine.value

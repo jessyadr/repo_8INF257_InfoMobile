@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.studywisely.ui.navigation.Screen
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.studywisely.ui.theme.PurpleMain
 import com.example.studywisely.ui.theme.PurpleText
@@ -39,7 +40,26 @@ fun AddEditRoutineScreen(
             viewModel.loadRoutine(routineId)
         }
     }
+    var selectedLatitude by remember { mutableStateOf<Double?>(null) }
+    var selectedLongitude by remember { mutableStateOf<Double?>(null) }
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
+    LaunchedEffect(navController.currentBackStackEntry) {
+        val lat = savedStateHandle?.get<Double>("selected_latitude")
+        val lng = savedStateHandle?.get<Double>("selected_longitude")
+
+        if (lat != null && lng != null) {
+            selectedLatitude = lat
+            selectedLongitude = lng
+
+            viewModel.onEvent(
+                AddEditRoutineEvent.PickedLocation(
+                    latitude = lat,
+                    longitude = lng
+                )
+            )
+        }
+    }
     Scaffold { padding ->
 
         Column(
@@ -51,11 +71,23 @@ fun AddEditRoutineScreen(
 
             Text(
                 text = "Ajouter / Modifier une routine",
+
                 color = PurpleMain,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp
             )
-
+            if (selectedLatitude != null && selectedLongitude != null) {
+                Text(text = "Lieu choisi :")
+                Text(text = "Latitude : $selectedLatitude")
+                Text(text = "Longitude : $selectedLongitude")
+            }
+            Button(
+                onClick = {
+                    navController.navigate(Screen.MapPickerScreen.route)
+                }
+            ) {
+                Text("Choisir un lieu sur la carte")
+            }
             LabeledTextField(
                 label = "Nom",
                 value = routine.title,
@@ -94,18 +126,13 @@ fun AddEditRoutineScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-    onClick = {
-        navController.navigate(Screen.MapPickerScreen.route)
-    }
-) {
-    Text("Choisir un lieu sur la carte")
-}
-
-Button(
-    onClick = {
-        viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
-        navController.popBackStack()
-    },
+                onClick = {
+                    viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
+                    navController.popBackStack()
+                }
+            ) {
+                Text(text = "Enregistrer la routine")
+            }
             Button(
                 onClick = {
                     viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)

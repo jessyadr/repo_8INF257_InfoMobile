@@ -64,6 +64,8 @@ fun RoutineCard(
                     text = "Examen/Livrable: $examFormatted",
                     fontSize = 18.sp
                 )
+
+
             }
 
             IconButton(
@@ -76,6 +78,7 @@ fun RoutineCard(
                     contentDescription = "Supprimer",
                     tint = PurpleMain,
                     modifier = Modifier.size(32.dp)
+
                 )
             }
         }

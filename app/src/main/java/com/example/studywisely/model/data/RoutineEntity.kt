@@ -11,5 +11,7 @@ data class RoutineEntity(
     val description: String? = null,
     val routineDateTimeMillis: Long? = null,
     val examDateTimeMillis: Long? = null,
-    val priority: PriorityType = PriorityType.Moyenne
+    val priority: PriorityType = PriorityType.Moyenne,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 )
