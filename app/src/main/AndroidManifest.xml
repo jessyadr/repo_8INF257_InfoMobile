@@ -11,6 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StudyWisely" >
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC54cdMzN2gmSOKmt5DzTxRy4QKrHGK8hc" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

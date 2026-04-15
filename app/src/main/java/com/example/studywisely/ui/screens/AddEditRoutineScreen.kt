@@ -125,14 +125,7 @@ fun AddEditRoutineScreen(
             )
 
             Spacer(modifier = Modifier.height(10.dp))
-            Button(
-                onClick = {
-                    viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
-                    navController.popBackStack()
-                }
-            ) {
-                Text(text = "Enregistrer la routine")
-            }
+
             Button(
                 onClick = {
                     viewModel.onEvent(AddEditRoutineEvent.SaveRoutine)
