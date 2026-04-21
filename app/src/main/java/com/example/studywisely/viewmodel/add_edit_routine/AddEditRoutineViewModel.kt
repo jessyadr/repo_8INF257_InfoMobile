@@ -6,10 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studywisely.model.local.PriorityType
 import com.example.studywisely.model.local.RoutineModel
+import com.example.studywisely.model.notifications.ReminderScheduler
 import com.example.studywisely.repository.RoutineRepository
 import kotlinx.coroutines.launch
 
-class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewModel() {
+class AddEditRoutineViewModel(
+    private val repository: RoutineRepository,
+    private val reminderScheduler: ReminderScheduler
+) : ViewModel() {
+
     private val _routine = mutableStateOf(RoutineModel())
     val routine: State<RoutineModel> = _routine
 
@@ -42,17 +47,20 @@ class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewM
                     examDateTimeMillis = event.millis
                 )
             }
+
             is AddEditRoutineEvent.PickedLocation -> {
                 _routine.value = _routine.value.copy(
                     latitude = event.latitude,
                     longitude = event.longitude
                 )
             }
+
             AddEditRoutineEvent.SaveRoutine -> {
                 viewModelScope.launch {
                     val current = _routine.value
                     val now = System.currentTimeMillis()
                     val examDate = current.examDateTimeMillis
+
                     val priority = if (examDate != null) {
                         val diffDays = (examDate - now) / (1000 * 60 * 60 * 24)
                         when {
@@ -63,13 +71,19 @@ class AddEditRoutineViewModel(private val repository: RoutineRepository) : ViewM
                     } else {
                         PriorityType.Faible
                     }
+
                     val routineToSave = current.copy(priority = priority)
 
-                    if (routineToSave.id == 0 || routineToSave.id == null) {
-                        repository.insertRoutine(routineToSave)
+                    if (routineToSave.id == null || routineToSave.id == 0) {
+                        val newId = repository.insertRoutine(routineToSave)
+                        val savedRoutine = routineToSave.copy(id = newId)
+                        reminderScheduler.scheduleReminder(savedRoutine)
                     } else {
+                        reminderScheduler.cancelReminder(routineToSave.id)
                         repository.updateRoutine(routineToSave)
+                        reminderScheduler.scheduleReminder(routineToSave)
                     }
+
                     _routine.value = RoutineModel()
                 }
             }

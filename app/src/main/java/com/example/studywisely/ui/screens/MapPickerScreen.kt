@@ -83,81 +83,87 @@ fun MapPickerScreen(navController: NavController) {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Sélectionner un lieu",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(16.dp)
-        )
-
-        OutlinedTextField(
-            value = query,
-            onValueChange = { query = it },
-            label = { Text("Rechercher un lieu") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = { searchLocation() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+    Scaffold { padding ->
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
         ) {
-            Text("Rechercher")
-        }
+            Text(
+                text = "Sélectionner un lieu",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(16.dp)
+            )
 
-        Spacer(modifier = Modifier.height(12.dp))
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                label = { Text("Rechercher un lieu") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
 
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            cameraPositionState = cameraPositionState,
-            onMapClick = { latLng ->
-                selectedPosition = latLng
-            }
-        ) {
-            selectedPosition?.let { position ->
-                Marker(
-                    state = MarkerState(position = position),
-                    title = "Lieu sélectionné"
-                )
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text("Latitude : ${selectedPosition?.latitude ?: "Non choisie"}")
-            Text("Longitude : ${selectedPosition?.longitude ?: "Non choisie"}")
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = {
-                    val position = selectedPosition ?: return@Button
-
-                    navController.previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("selected_latitude", position.latitude)
-
-                    navController.previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("selected_longitude", position.longitude)
-
-                    navController.popBackStack()
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = selectedPosition != null
+                onClick = { searchLocation() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             ) {
-                Text("Valider et revenir")
+                Text("Rechercher")
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                cameraPositionState = cameraPositionState,
+                onMapClick = { latLng ->
+                    selectedPosition = latLng
+                }
+            ) {
+                selectedPosition?.let { position ->
+                    Marker(
+                        state = MarkerState(position = position),
+                        title = "Lieu sélectionné"
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text("Latitude : ${selectedPosition?.latitude ?: "Non choisie"}")
+                Text("Longitude : ${selectedPosition?.longitude ?: "Non choisie"}")
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        val position = selectedPosition ?: return@Button
+
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("selected_latitude", position.latitude)
+
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("selected_longitude", position.longitude)
+
+                        navController.popBackStack()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = selectedPosition != null
+                ) {
+                    Text("Valider et revenir")
+                }
             }
         }
     }
+
 }

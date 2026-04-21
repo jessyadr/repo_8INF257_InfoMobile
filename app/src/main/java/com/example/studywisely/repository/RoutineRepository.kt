@@ -16,8 +16,8 @@ class RoutineRepository(private val db: RoutinesDatabase) {
         return db.dao.getRoutineById(id)?.let { RoutineModel.Companion.fromEntity(it) }
     }
 
-    suspend fun insertRoutine(routine: RoutineModel) {
-        db.dao.insert(RoutineModel.Companion.toEntity(routine))
+    suspend fun insertRoutine(routine: RoutineModel): Int {
+        return db.dao.insert(RoutineModel.Companion.toEntity(routine)).toInt()
     }
 
     suspend fun updateRoutine(routine: RoutineModel) {
@@ -27,5 +27,4 @@ class RoutineRepository(private val db: RoutinesDatabase) {
     suspend fun deleteRoutine(id: Int) {
         db.dao.deleteById(id)
     }
-
 }
